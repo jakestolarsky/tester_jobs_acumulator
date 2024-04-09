@@ -1,0 +1,53 @@
+{
+    "sites": [
+      {
+        "name": "theprotocol.it",
+        "url": "https://theprotocol.it/filtry/qa-testing;sp?sort=date",
+        "selectors": {
+          "container_tag": "a",
+          "container_attrs": {"class": "anchorClass_aqdsolh"},
+          "job_title": {"tag": "h2", "attrs": {}},
+          "company": {"tag": "div", "attrs": {"data-test": "text-employerName"}},
+          "city": {"tag": "div", "attrs": {"data-test": "text-workplaces"}},
+          "link_offer": {"tag": "", "attrs":{}}
+        }
+      },
+      {
+        "name": "bulldogjob",
+        "url": "https://bulldogjob.pl/companies/jobs/s/role,qa,tester/order,published,desc",
+        "selectors": {
+          "container_tag": "a",
+          "container_attrs": {"class": "JobListItem_item__M79JI"},
+          "job_title": {"tag": "h3", "attrs": {}},
+          "company": {"tag": "div", "attrs": {"class": "text-xxs uppercase text-neutral-800 font-semibold tracking-wider"}},
+          "city": {"tag": "span", "attrs": {"class": "text-xs"}},
+          "link_offer": {"tag": "", "attrs":{}}
+        }
+      },
+      {
+        "name": "nofluffjobs",
+        "url": "https://nofluffjobs.com/pl/testing?page=1&sort=newest",
+        "selectors": {
+          "container_tag": "a",
+          "container_attrs": {"class": "posting-list-item"},
+          "job_title": {"tag": "h3", "attrs": {"data-cy": "title position on the job offer listing"}},
+          "company": {"tag": "h4", "attrs": {"class": "company-name"}},
+          "city": {"tag": "span", "attrs": {"class": "tw-text-ellipsis tw-inline-block tw-overflow-hidden tw-whitespace-nowrap tw-max-w-[100px] md:tw-max-w-[200px] tw-text-right"}},
+          "link_offer": {"tag": "", "attrs":{}}
+        }
+      },
+      {
+        "name": "justjoinit",
+        "url": "https://justjoin.it/all-locations/testing?orderBy=DESC&sortBy=newest",
+        "selectors": {
+          "container_tag": "div",
+          "container_attrs": {"class": "css-2crog7"},
+          "job_title": {"tag": "h2", "attrs": {"class": "css-1gehlh0"}},
+          "company": {"tag": "span", "attrs": {"class": "css-aryx9u"}},
+          "city": {"tag": "div", "attrs": {"class": "css-11qgze1"}},
+          "link_offer": {"tag": "a", "attrs": {"class": "offer_list_offer_link css-4lqp8g"}}
+        }
+      }
+    ]
+  }
+  
