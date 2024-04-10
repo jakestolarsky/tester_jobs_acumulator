@@ -9,9 +9,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 p-8">
+
 <h1 x-data="{title: '🐞 Tester jobs acumulator'}" x-text="title" class="text-lg font-semibold"></h1>
 
-<div x-data="{ configPath: '', scrapingInProgress: false, jobs: [] }">
+<div x-data="jobFetcher()">
 
     <button @click="scrapeJobs()"
             :disabled="scrapingInProgress"
@@ -21,38 +22,53 @@
     </button>
 
     <div x-show="jobs.length > 0">
-        <h2 class="text-lg font-semibold text-gray-900">Znalezione oferty pracy:</h2>
-        <ul class="mt-3 max-w-lg list-disc list-inside text-sm text-gray-600">
-            <template x-for="job in jobs" :key="job.id">
-                <li>
-                    <a :href="job.link" class="text-indigo-600 hover:text-indigo-900" x-text="job.title"></a> - <span x-text="job.company"></span>
+        <h2 class="text-lg font-semibold text-gray-900">Job offers found:</h2>
+
+        <ul class="max-w-md divide-y divide-gray-200 dark:divide-gray-700">
+            <template x-for="(job, index) in jobs" :key="index">
+                <li class="pb-3 sm:pb-4">
+                    <a :href="job.link" class="text-indigo-600 hover:text-indigo-900">
+                        <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                            <p x-text="job.title" class="font-semibold text-gray-900 truncate"></p>
+                            <p x-text="job.company" class="text-sm text-gray-900 truncate"></p>
+                            <p x-text="job.city" class="text-sm text-gray-900 truncate"></p>
+                        </div>
+                    </a>
                 </li>
             </template>
         </ul>
+
     </div>
 </div>
 
 <script>
-    function scrapeJobs() {
-        this.scrapingInProgress = true;
-        fetch('/scrape/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ configPath: this.configPath })
-        })
-        .then(response => response.json())
-        .then(data => {
-            this.jobs = data.jobs;
-            this.scrapingInProgress = false;
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            this.scrapingInProgress = false;
-        });
-    }
-</script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('jobFetcher', () => ({
+            scrapingInProgress: false,
+            jobs: [],
+            
+            scrapeJobs() {
+                this.scrapingInProgress = true;
+                fetch('/scrape/')
+                    .then(response => response.json())
+                    .then(data => {
+                        this.jobs = data.map(job => ({
+                            title: job.job_title,
+                            company: job.company,
+                            city: job.city,
+                            link: job.link_offer
+                        }));
+                        this.scrapingInProgress = false;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        this.scrapingInProgress = false;
+                    });
+            }
+        }));
+    });
+    </script>
+    
 
 </body>
 </html>
