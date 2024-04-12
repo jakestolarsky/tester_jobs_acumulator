@@ -22,8 +22,8 @@
 
     <div x-show="jobs.length > 0" class="relative overflow-x-auto shadow-md sm:rounded-lg">
         
-        <table class="min-w-full text-xs text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table class="min-w-full text-xs text-left rtl:text-right text-orange-100 dark:text-stone-800">
+            <thead class="text-xs text-orange-100 uppercase bg-stone-800 dark:bg-orange-100 dark:text-stone-800">
                 <tr>
                     <th scope="col" class="px-6 py-3 font-semibold truncate max-w-xs">DATE</th>
                     <th scope="col" class="px-6 py-3 font-semibold truncate max-w-xs">WEBSITE</th>
@@ -34,8 +34,8 @@
             </thead>
             <tbody>
                 <template x-for="(job, index) in jobs" :key="index">
-                    <tr class="bg-white border-b dark:bg-neutral-700 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <th scope="row" class="px-6 py-4 font-semibold text-gray-900 whitespace-nowrap dark:text-white truncate max-w-xs" :title="job.date">2024/04/04</th>
+                    <tr class="bg-orange-100 border-b dark:bg-orange-100 dark:border-gray-700 hover:bg-stone-800 dark:hover:bg-orange-100">
+                        <th scope="row" class="px-6 py-4 font-semibold truncate max-w-xs" :title="job.date">2024/04/04</th>
                         <td class="px-6 py-4 font-semibold truncate max-w-xs" :title="job.website">justjoinit</td>
                         <td class="px-6 py-4 font-semibold truncate max-w-xs" :title="job.title"><a :href="job.link" x-text="job.title"></a></td>
                         <td x-text="job.company" class="px-6 py-4 font-semibold truncate max-w-xs" :title="job.company"></td>
