@@ -2,28 +2,33 @@ import json
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
+from datetime import datetime
 
 
 class JobScraper:
-    def __init__(self, url, selectors):
+    def __init__(self, url, selectors, website_name):
         self.url = url
         self.selectors = selectors
+        self.website_name = website_name
         self.jobs = []
 
     def fetch_jobs(self):
         response = requests.get(self.url)
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'html.parser')
+            scrape_date = datetime.now().strftime('%Y/%m/%d')
             for item in soup.find_all(self.selectors['container_tag'], self.selectors['container_attrs']):
-                self.jobs.append(self.extract_job_details(item))
+                self.jobs.append(self.extract_job_details(item, scrape_date))
         else:
             print('Page content failed to download, status code:', response.status_code)
 
-    def extract_job_details(self, item):
+    def extract_job_details(self, item, scrape_date):
         link_offer = self.get_attr(item, 'link_offer', 'href')
         full_link = urljoin(self.url, link_offer)
 
         details = {
+            'date': scrape_date,
+            'website': self.website_name,
             'job_title': self.get_text(item, 'job_title'),
             'company': self.get_text(item, 'company'),
             'city': self.get_text(item, 'city'),

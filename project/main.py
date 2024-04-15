@@ -29,10 +29,10 @@ async def root(request: Request):
 @app.get("/scrape/")
 async def scrape_jobs():
     try:
-        config = load_config(r"E:\my\tester_jobs_acumulator\project\config\job_sites.json")
+        config = load_config("config/job_sites.json")
         all_jobs = []
         for site in config['sites']:
-            scraper = JobScraper(site['url'], site['selectors'])
+            scraper = JobScraper(site['url'], site['selectors'], site['name'])
             scraper.fetch_jobs()
             all_jobs.extend(scraper.jobs)  # Zbieranie wszystkich ofert pracy
         return all_jobs  # Zwracanie ofert pracy jako JSON
