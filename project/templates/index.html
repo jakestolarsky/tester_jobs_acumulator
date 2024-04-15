@@ -8,7 +8,7 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
-    <!-- Dodatkowe style -->
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&display=swap');
 
@@ -25,19 +25,23 @@
         }
 
         .hover-svg:hover .download-icon path {
-            stroke: #ffedd5; /* Hex kod Tailwind'a dla orange-100 */
+            stroke: #ffedd5;
         }
+
         .download-arrow {
-  transition: transform 0.2s linear;
-}
-button:hover .download-arrow {
-  transform: translate(0, 3px);
-}
+            transition: transform 0.2s linear;
+        }
+
+        button:hover .download-arrow {
+            transform: translate(0, 3px);
+        }
     </style>
+
 </head>
+
 <body class="bg-orange-100 p-8 flex flex-col items-center justify-center min-h-screen">
 
-<h1 x-data="{title: '🐞 TESTER JOBS ACUMULATOR'}" x-text="title" class="text-stone-800 text-3xl font-black"></h1>
+<h1 x-data="{title: '🐞 TESTER JOBS ACUMULATOR'}" x-text="title" class="text-stone-800 text-3xl font-black mb-5"></h1>
 
 <div x-data="jobFetcher()" class="relative overflow-x-auto">
     <div class="flex items-center justify-between space-x-2">
@@ -59,7 +63,7 @@ button:hover .download-arrow {
 
 
     <div x-show="jobs.length > 0" class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        
+
         <table class="min-w-full text-xs text-left rtl:text-right text-orange-100 dark:text-stone-800">
             <thead class="text-xs text-orange-100 uppercase bg-stone-800 dark:bg-orange-100 dark:text-stone-800">
                 <tr class="border-b dark:border-stone-800">
@@ -92,7 +96,7 @@ button:hover .download-arrow {
         Alpine.data('jobFetcher', () => ({
             scrapingInProgress: false,
             jobs: [],
-            
+
             scrapeJobs() {
                 this.scrapingInProgress = true;
                 fetch('/scrape/')
@@ -119,8 +123,7 @@ button:hover .download-arrow {
             }
         }));
     });
-    </script>
-    
+</script>
 
 </body>
 </html>
