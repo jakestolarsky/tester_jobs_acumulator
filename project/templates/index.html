@@ -23,6 +23,16 @@
         .font-black {
             font-weight: 800;
         }
+
+        .hover-svg:hover .download-icon path {
+            stroke: #ffedd5; /* Hex kod Tailwind'a dla orange-100 */
+        }
+        .download-arrow {
+  transition: transform 0.2s linear;
+}
+button:hover .download-arrow {
+  transform: translate(0, 3px);
+}
     </style>
 </head>
 <body class="bg-orange-100 p-8 flex flex-col items-center justify-center min-h-screen">
@@ -30,28 +40,39 @@
 <h1 x-data="{title: '🐞 TESTER JOBS ACUMULATOR'}" x-text="title" class="text-stone-800 text-3xl font-black"></h1>
 
 <div x-data="jobFetcher()" class="relative overflow-x-auto">
-    <button @click="scrapeJobs()"
-            :disabled="scrapingInProgress"
-            class="text-stone-800 hover:orange-100 border-2 border-stone-800 hover:bg-stone-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-black rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-stone-800 dark:text-stone-800 dark:hover:text-orange-100 dark:hover:bg-stone-600 dark:focus:ring-stone-800">
-        <span x-show="!scrapingInProgress">GIVE ME JOBS!</span>
-        <span x-show="scrapingInProgress"><p class="text-sm animate-spin w-5">🐞</p></span>
-    </button>
+    <div class="flex items-center justify-between space-x-2">
+        <button @click="scrapeJobs()"
+                :disabled="scrapingInProgress"
+                class="text-stone-800 hover:orange-100 border-2 border-stone-800 hover:bg-stone-800 focus:ring-2 focus:outline-none focus:ring-gray-300 font-black rounded-lg text-sm px-5 py-3 h-12 text-center me-2 mb-2 dark:border-stone-800 dark:text-stone-800 dark:hover:text-orange-100 dark:hover:bg-stone-600 dark:focus:ring-stone-800">
+            <span x-show="!scrapingInProgress">GIVE ME JOBS!</span>
+            <span x-show="scrapingInProgress"><p class="text-sm animate-spin w-5">🐞</p></span>
+        </button>
+
+        <button @click="downloadFile('download_offers/json')"
+                class="hover-svg text-stone-800 hover:orange-100 border-2 border-stone-800 hover:bg-stone-800 focus:ring-2 focus:outline-none focus:ring-gray-300 rounded-lg px-4 py-2.5 h-12 text-center me-2 mb-2 dark:border-stone-800 dark:text-stone-800 dark:hover:text-orange-100 dark:hover:bg-stone-600 dark:focus:ring-stone-800">
+            <svg class="download-icon" width="15" height="22" viewBox="0 0 18 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path class="download-arrow" d="M13 9L9 13M9 13L5 9M9 13V1" stroke="#292524" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M1 17V18C1 18.7956 1.31607 19.5587 1.87868 20.1213C2.44129 20.6839 3.20435 21 4 21H14C14.7956 21 15.5587 20.6839 16.1213 20.1213C16.6839 19.5587 17 18.7956 17 18V17" stroke="#292524" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </div>
+
 
     <div x-show="jobs.length > 0" class="relative overflow-x-auto shadow-md sm:rounded-lg">
         
         <table class="min-w-full text-xs text-left rtl:text-right text-orange-100 dark:text-stone-800">
             <thead class="text-xs text-orange-100 uppercase bg-stone-800 dark:bg-orange-100 dark:text-stone-800">
-                <tr>
-                    <th scope="col" class="px-6 py-3 font-semibold truncate max-w-xs">DATE</th>
-                    <th scope="col" class="px-6 py-3 font-semibold truncate max-w-xs">WEBSITE</th>
-                    <th scope="col" class="px-6 py-3 font-semibold truncate max-w-xs">TITLE</th>
-                    <th scope="col" class="px-6 py-3 font-semibold truncate max-w-xs">COMPANY</th>
-                    <th scope="col" class="px-6 py-3 font-semibold truncate max-w-xs">CITY</th>
+                <tr class="border-b dark:border-stone-800">
+                    <th scope="col" class="px-6 py-3 font-black truncate max-w-xs">DATE</th>
+                    <th scope="col" class="px-6 py-3 font-black truncate max-w-xs">WEBSITE</th>
+                    <th scope="col" class="px-6 py-3 font-black truncate max-w-xs">TITLE</th>
+                    <th scope="col" class="px-6 py-3 font-black truncate max-w-xs">COMPANY</th>
+                    <th scope="col" class="px-6 py-3 font-black truncate max-w-xs">CITY</th>
                 </tr>
             </thead>
             <tbody>
                 <template x-for="(job, index) in jobs" :key="index">
-                    <tr class="bg-orange-100 border-b dark:bg-orange-100 dark:border-gray-700 hover:bg-orange-100 dark:hover:bg-stone-800 dark:text-stone-800 dark:hover:text-orange-100">
+                    <tr class="bg-orange-100 border-b dark:bg-orange-100 dark:border-stone-400 hover:bg-orange-100 dark:hover:bg-stone-800 dark:text-stone-800 dark:hover:text-orange-100">
                         <th x-text="job.date" scope="row" class="px-6 py-4 font-semibold truncate max-w-xs" :title="job.date"></th>
                         <td x-text="job.website" class="px-6 py-4 font-semibold truncate max-w-xs" :title="job.website"></td>
                         <td class="px-6 py-4 font-semibold truncate max-w-xs" :title="job.title"><a :href="job.link" x-text="job.title"></a></td>
@@ -91,6 +112,10 @@
                         console.error('Error:', error);
                         this.scrapingInProgress = false;
                     });
+            },
+
+            downloadFile(url) {
+            window.location.href = url;
             }
         }));
     });
