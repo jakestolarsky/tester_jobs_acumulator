@@ -7,6 +7,23 @@
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
+    <!-- Dodatkowe style -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&display=swap');
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .font-semibold {
+            font-weight: 600;
+        }
+
+        .font-black {
+            font-weight: 800;
+        }
+    </style>
 </head>
 <body class="bg-orange-100 p-8 flex flex-col items-center justify-center min-h-screen">
 
@@ -34,7 +51,7 @@
             </thead>
             <tbody>
                 <template x-for="(job, index) in jobs" :key="index">
-                    <tr class="bg-orange-100 border-b dark:bg-orange-100 dark:border-gray-700 hover:bg-stone-800 dark:hover:bg-orange-100">
+                    <tr class="bg-orange-100 border-b dark:bg-orange-100 dark:border-gray-700 hover:bg-orange-100 dark:hover:bg-stone-800 dark:text-stone-800 dark:hover:text-orange-100">
                         <th scope="row" class="px-6 py-4 font-semibold truncate max-w-xs" :title="job.date">2024/04/04</th>
                         <td class="px-6 py-4 font-semibold truncate max-w-xs" :title="job.website">justjoinit</td>
                         <td class="px-6 py-4 font-semibold truncate max-w-xs" :title="job.title"><a :href="job.link" x-text="job.title"></a></td>
