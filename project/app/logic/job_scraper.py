@@ -1,4 +1,5 @@
 import json
+import csv
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
@@ -53,3 +54,15 @@ class JobScraper:
 
     def get_jobs_as_json(self):
         return json.dumps(self.jobs, ensure_ascii=False)
+
+    def save_jobs_as_json(self, filename):
+        with open(filename, 'w', encoding='utf-8') as file:
+            json.dump(self.jobs, file, ensure_ascii=False, indent=4)
+
+    def save_jobs_as_csv(self, filename):
+        fieldnames = ['date', 'website', 'job_title', 'company', 'city', 'link_offer']
+        with open(filename, mode='w', newline='', encoding='utf-8') as file:
+            writer = csv.DictWriter(file, fieldnames=fieldnames)
+            writer.writeheader()
+            for job in self.jobs:
+                writer.writerow(job)
