@@ -36,58 +36,76 @@
             transform: translate(0, 3px);
         }
     </style>
-
 </head>
 
-<body class="bg-orange-100 p-8 flex flex-col items-center justify-center min-h-screen">
+<body class="bg-orange-100">
+<div class="overflow-x-auto flex flex-col p-8 items-center justify-center min-h-screen w-full">
+    <h1 x-data="{title: '🐞 TESTER JOBS ACUMULATOR'}" x-text="title" class="text-stone-800 text-3xl font-black mb-5">
+    </h1>
 
-<h1 x-data="{title: '🐞 TESTER JOBS ACUMULATOR'}" x-text="title" class="text-stone-800 text-3xl font-black mb-5"></h1>
+    <div x-data="jobFetcher()" class="relative overflow-x-auto">
+        <div class="flex items-center justify-between space-x-2">
+            <button @click="scrapeJobs()"
+                    :disabled="scrapingInProgress"
+                    class="shadow-md hover:orange-100 border-2 border-stone-800 hover:bg-stone-800 focus:ring-2 focus:outline-none focus:ring-gray-300 font-black rounded-lg text-sm px-5 py-3 h-12 text-center me-2 mb-2 dark:border-stone-800 dark:text-stone-800 dark:hover:text-orange-100 dark:hover:bg-stone-600 dark:focus:ring-stone-800">
+                <span x-show="!scrapingInProgress">GIVE ME JOBS!</span>
+                <span x-show="scrapingInProgress"><p class="text-sm animate-spin w-5">🐞</p></span>
+            </button>
 
-<div x-data="jobFetcher()" class="relative overflow-x-auto">
-    <div class="flex items-center justify-between space-x-2">
-        <button @click="scrapeJobs()"
-                :disabled="scrapingInProgress"
-                class="text-stone-800 hover:orange-100 border-2 border-stone-800 hover:bg-stone-800 focus:ring-2 focus:outline-none focus:ring-gray-300 font-black rounded-lg text-sm px-5 py-3 h-12 text-center me-2 mb-2 dark:border-stone-800 dark:text-stone-800 dark:hover:text-orange-100 dark:hover:bg-stone-600 dark:focus:ring-stone-800">
-            <span x-show="!scrapingInProgress">GIVE ME JOBS!</span>
-            <span x-show="scrapingInProgress"><p class="text-sm animate-spin w-5">🐞</p></span>
-        </button>
+            <button @click="downloadFile('download_offers/json')"
+                    class="shadow-md hover-svg text-stone-800 hover:orange-100 border-2 border-stone-800 hover:bg-stone-800 focus:ring-2 focus:outline-none focus:ring-gray-300 rounded-lg px-4 py-2.5 h-12 text-center me-2 mb-2 dark:border-stone-800 dark:text-stone-800 dark:hover:text-orange-100 dark:hover:bg-stone-600 dark:focus:ring-stone-800">
+                <svg class="download-icon" width="15" height="22" viewBox="0 0 18 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path class="download-arrow" d="M13 9L9 13M9 13L5 9M9 13V1" stroke="#292524" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M1 17V18C1 18.7956 1.31607 19.5587 1.87868 20.1213C2.44129 20.6839 3.20435 21 4 21H14C14.7956 21 15.5587 20.6839 16.1213 20.1213C16.6839 19.5587 17 18.7956 17 18V17" stroke="#292524" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
 
-        <button @click="downloadFile('download_offers/json')"
-                class="hover-svg text-stone-800 hover:orange-100 border-2 border-stone-800 hover:bg-stone-800 focus:ring-2 focus:outline-none focus:ring-gray-300 rounded-lg px-4 py-2.5 h-12 text-center me-2 mb-2 dark:border-stone-800 dark:text-stone-800 dark:hover:text-orange-100 dark:hover:bg-stone-600 dark:focus:ring-stone-800">
-            <svg class="download-icon" width="15" height="22" viewBox="0 0 18 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path class="download-arrow" d="M13 9L9 13M9 13L5 9M9 13V1" stroke="#292524" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M1 17V18C1 18.7956 1.31607 19.5587 1.87868 20.1213C2.44129 20.6839 3.20435 21 4 21H14C14.7956 21 15.5587 20.6839 16.1213 20.1213C16.6839 19.5587 17 18.7956 17 18V17" stroke="#292524" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </button>
-    </div>
+        <div x-show="jobs.length > 0" class="overflow-x-auto shadow-md hidden border-2 border-stone-800 rounded-lg xl:block">
 
-
-    <div x-show="jobs.length > 0" class="relative overflow-x-auto shadow-md sm:rounded-lg">
-
-        <table class="min-w-full text-xs text-left rtl:text-right text-orange-100 dark:text-stone-800">
-            <thead class="text-xs text-orange-100 uppercase bg-stone-800 dark:bg-orange-100 dark:text-stone-800">
-                <tr class="border-b dark:border-stone-800">
-                    <th scope="col" class="px-6 py-3 font-black truncate max-w-xs">DATE</th>
-                    <th scope="col" class="px-6 py-3 font-black truncate max-w-xs">WEBSITE</th>
-                    <th scope="col" class="px-6 py-3 font-black truncate max-w-xs">TITLE</th>
-                    <th scope="col" class="px-6 py-3 font-black truncate max-w-xs">COMPANY</th>
-                    <th scope="col" class="px-6 py-3 font-black truncate max-w-xs">CITY</th>
-                </tr>
-            </thead>
-            <tbody>
-                <template x-for="(job, index) in jobs" :key="index">
-                    <tr class="bg-orange-100 border-b dark:bg-orange-100 dark:border-stone-400 hover:bg-orange-100 dark:hover:bg-stone-800 dark:text-stone-800 dark:hover:text-orange-100">
-                        <th x-text="job.date" scope="row" class="px-6 py-4 font-semibold truncate max-w-xs" :title="job.date"></th>
-                        <td x-text="job.website" class="px-6 py-4 font-semibold truncate max-w-xs" :title="job.website"></td>
-                        <td class="px-6 py-4 font-semibold truncate max-w-xs" :title="job.title"><a :href="job.link" x-text="job.title"></a></td>
-                        <td x-text="job.company" class="px-6 py-4 font-semibold truncate max-w-xs" :title="job.company"></td>
-                        <td x-text="job.city" class="px-6 py-4 font-semibold truncate max-w-xs" :title="job.city"></td>
+            <table class="min-w-full text-xs text-left rtl:text-right text-orange-100 dark:text-stone-800 shadow-md">
+                <thead class="text-xs text-orange-100 uppercase bg-stone-800 dark:bg-orange-100 dark:text-stone-800">
+                    <tr class="border-b-2 dark:border-stone-800">
+                        <th scope="col" class="px-6 py-3 font-black truncate max-w-xs">DATE</th>
+                        <th scope="col" class="px-6 py-3 font-black truncate max-w-xs">WEBSITE</th>
+                        <th scope="col" class="px-6 py-3 font-black truncate max-w-xs">TITLE</th>
+                        <th scope="col" class="px-6 py-3 font-black truncate max-w-xs">COMPANY</th>
+                        <th scope="col" class="px-6 py-3 font-black truncate max-w-xs">CITY</th>
                     </tr>
-                </template>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <template x-for="(job, index) in jobs" :key="index">
+                        <tr class="bg-orange-100 border-b dark:bg-orange-100 dark:border-stone-400 hover:bg-orange-100 dark:hover:bg-stone-800 dark:text-stone-800 dark:hover:text-orange-100">
+                            <th x-text="job.date" :title="job.date" scope="row" class="px-6 py-4 font-semibold truncate max-w-xs"></th>
+                            <td x-text="job.website" :title="job.website" class="px-6 py-4 font-semibold truncate max-w-xs"></td>
+                            <td class="px-6 py-4 font-black truncate max-w-xs" :title="job.title"><a :href="job.link" x-text="job.title"></a></td>
+                            <td x-text="job.company" :title="job.company" class="px-6 py-4 font-semibold truncate max-w-xs"></td>
+                            <td x-text="job.city" :title="job.city" class="px-6 py-4 font-semibold truncate max-w-xs"></td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+
+        <div x-show="jobs.length > 0" class="grid grid-cols-1 gap-4 xl:hidden">
+
+            <template x-for="(job, index) in jobs" :key="index">
+                <a :href="job.link" class="block flex items-center space-x-2 text-sm shadow-md text-stone-800 hover:text-orange-100 border-2 border-stone-800 hover:bg-stone-600 rounded-lg">
+                    <div class="w-full p-2">
+                        <p x-text="job.date" :title="job.date" class="text-xs"></p>
+                        <h4 x-text="job.title" :title="job.title" class="text-lg font-black truncate"></h4>
+                        <p x-text="job.website" :title="job.website" class="text-xs"></p>
+                        <div class="flex justify-between w-full space-x-2">
+                            <p x-text="job.company" :title="job.company" class="text-sm truncate max-w-1/2"></p>
+                            <p x-text="job.city" :title="job.city" class="text-sm max-w-1/2"></p>
+                        </div>
+                    </div>
+                </a>
+            </template>
+
+        </div>
+
     </div>
-</div>
 
 </div>
 
