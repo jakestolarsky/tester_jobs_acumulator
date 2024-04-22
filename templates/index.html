@@ -129,6 +129,7 @@
           x-show="jobs.length > 0"
           class="overflow-x-auto shadow-md hidden border-2 border-stone-800 rounded-lg xl:block"
         >
+
           <table
             class="min-w-full text-xs text-left rtl:text-right text-orange-100 dark:text-stone-800 shadow-md"
           >
@@ -140,7 +141,14 @@
                   DATE
                 </th>
                 <th scope="col" class="px-6 py-3 font-black truncate max-w-xs">
-                  WEBSITE
+                    <div class="">
+                        <select x-model="selectedWebsite" class="rounded bg-orange-100">
+                            <option value="">WEBSITE</option>
+                            <template x-for="website in uniqueWebsites" :key="website">
+                                <option x-text="website"></option>
+                            </template>
+                        </select>
+                    </div>
                 </th>
                 <th scope="col" class="px-6 py-3 font-black truncate max-w-xs">
                   TITLE
@@ -154,7 +162,7 @@
               </tr>
             </thead>
             <tbody>
-              <template x-for="(job, index) in jobs" :key="index">
+              <template x-for="(job, index) in filteredJobs" :key="index">
                 <tr
                   class="bg-orange-100 border-b dark:bg-orange-100 dark:border-stone-400 hover:bg-orange-100 dark:hover:bg-stone-800 dark:text-stone-800 dark:hover:text-orange-100"
                 >
@@ -192,7 +200,17 @@
         </div>
 
         <div x-show="jobs.length > 0" class="grid grid-cols-1 gap-4 xl:hidden">
-          <template x-for="(job, index) in jobs" :key="index">
+
+            <div class="py-4">
+                <select x-model="selectedWebsite" class="rounded bg-orange-100">
+                    <option value="">WEBSITE</option>
+                    <template x-for="website in uniqueWebsites" :key="website">
+                        <option x-text="website"></option>
+                    </template>
+                </select>
+            </div>
+
+          <template x-for="(job, index) in filteredJobs" :key="index">
             <a
               :href="job.link"
               target="_blank"
@@ -230,37 +248,50 @@
     </div>
 
     <script>
-      document.addEventListener("alpine:init", () => {
-        Alpine.data("jobFetcher", () => ({
-          scrapingInProgress: false,
-          jobs: [],
+    document.addEventListener("alpine:init", () => {
+    Alpine.data("jobFetcher", () => ({
+        scrapingInProgress: false,
+        jobs: [],
+        selectedWebsite: '',
 
-          scrapeJobs() {
-            this.scrapingInProgress = true;
-            fetch("/scrape/")
-              .then((response) => response.json())
-              .then((data) => {
-                this.jobs = data.map((job) => ({
-                  date: job.date,
-                  website: job.website,
-                  title: job.job_title,
-                  company: job.company,
-                  city: job.city,
-                  link: job.link_offer,
-                }));
-                this.scrapingInProgress = false;
-              })
-              .catch((error) => {
-                console.error("Error:", error);
-                this.scrapingInProgress = false;
-              });
-          },
+        scrapeJobs() {
+        this.scrapingInProgress = true;
+        fetch("/scrape/")
+            .then((response) => response.json())
+            .then((data) => {
+            this.jobs = data.map((job) => ({
+                date: job.date,
+                website: job.website,
+                title: job.job_title,
+                company: job.company,
+                city: job.city,
+                link: job.link_offer,
+            }));
+            this.scrapingInProgress = false;
+            })
+            .catch((error) => {
+            console.error("Error:", error);
+            this.scrapingInProgress = false;
+            });
+        },
 
-          downloadFile(url) {
-            window.location.href = url;
-          },
-        }));
-      });
+        downloadFile(url) {
+        window.location.href = url;
+        },
+
+        get uniqueWebsites() {
+        const websites = this.jobs.map(job => job.website);
+        return [...new Set(websites)];
+        },
+
+        get filteredJobs() {
+        if (this.selectedWebsite === '') {
+            return this.jobs;
+        }
+        return this.jobs.filter(job => job.website === this.selectedWebsite);
+        },
+    }));
+    });
     </script>
   </body>
 </html>
