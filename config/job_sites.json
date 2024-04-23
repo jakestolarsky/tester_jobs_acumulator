@@ -43,7 +43,7 @@
           "container_tag": "div",
           "container_attrs": {"class": "css-2crog7"},
           "job_title": {"tag": "h2", "attrs": {"class": "css-1gehlh0"}},
-          "company": {"tag": "span", "attrs": {"class": "css-aryx9u"}},
+          "company": {"tag": "div", "attrs": {"class": "css-aryx9u"}},
           "city": {"tag": "div", "attrs": {"class": "css-11qgze1"}},
           "link_offer": {"tag": "a", "attrs": {"class": "offer_list_offer_link css-4lqp8g"}}
         }
