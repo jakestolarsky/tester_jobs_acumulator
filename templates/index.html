@@ -6,41 +6,12 @@
     <title>🐞 Tester jobs acumulator</title>
     <link rel="icon" type="image/png" href="/static/favicon.png">
 
+    <link rel="stylesheet" href="/static/style.css">
+
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&display=swap" rel="stylesheet"/>
 
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&display=swap");
-
-      body {
-        font-family: "Montserrat", sans-serif;
-      }
-
-      .font-semibold {
-        font-weight: 600;
-      }
-
-      .font-black {
-        font-weight: 800;
-      }
-
-      .hover-svg:hover .download-icon path {
-        stroke: #ffedd5;
-      }
-
-      a:hover .github-icon {
-        fill: #ffedd5;
-      }
-
-      .download-arrow {
-        transition: transform 0.2s linear;
-      }
-
-      button:hover .download-arrow {
-        transform: translate(0, 3px);
-      }
-    </style>
   </head>
 
   <body class="bg-orange-100">
@@ -248,75 +219,6 @@
       </div>
     </div>
 
-    <script>
-    document.addEventListener("alpine:init", () => {
-    Alpine.data("jobFetcher", () => ({
-      scrapingInProgress: false,
-      jobs: [],
-      selectedWebsite: '',
-
-      init() {
-        this.loadJobsFromStorage();
-      },
-
-      loadJobsFromStorage() {
-        const storedJobs = localStorage.getItem('jobs');
-        if (storedJobs) {
-          this.jobs = JSON.parse(storedJobs);
-        }
-      },
-
-      scrapeJobs() {
-        this.scrapingInProgress = true;
-        fetch("/scrape/")
-          .then((response) => response.json())
-          .then((data) => {
-            const newJobs = data.map((job) => ({
-              date: job.date,
-              website: job.website,
-              title: job.job_title,
-              company: job.company,
-              city: job.city,
-              link: job.link_offer,
-            }));
-            this.updateJobsWithNoDuplicates(newJobs);
-            this.scrapingInProgress = false;
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            this.scrapingInProgress = false;
-          });
-      },
-
-      updateJobsWithNoDuplicates(newJobs) {
-        const currentJobsMap = new Map(this.jobs.map(job => [job.link, job]));
-        newJobs.forEach(job => {
-          if (!currentJobsMap.has(job.link)) {
-            this.jobs.unshift(job);
-            currentJobsMap.set(job.link, job);
-          }
-        });
-        localStorage.setItem('jobs', JSON.stringify(this.jobs));
-      },
-
-      downloadFile(url) {
-        window.location.href = url;
-      },
-
-      get uniqueWebsites() {
-        const websites = this.jobs.map(job => job.website);
-        return [...new Set(websites)];
-      },
-
-      get filteredJobs() {
-        if (this.selectedWebsite === '') {
-          return this.jobs;
-        }
-        return this.jobs.filter(job => job.website === this.selectedWebsite);
-      },
-    }));
-  });
-
-    </script>
+    <script src="/static/script.js"></script>
   </body>
 </html>

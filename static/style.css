@@ -1,0 +1,29 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&display=swap");
+
+body {
+  font-family: "Montserrat", sans-serif;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-black {
+  font-weight: 800;
+}
+
+.hover-svg:hover .download-icon path {
+  stroke: #ffedd5;
+}
+
+a:hover .github-icon {
+  fill: #ffedd5;
+}
+
+.download-arrow {
+  transition: transform 0.2s linear;
+}
+
+button:hover .download-arrow {
+  transform: translate(0, 3px);
+}
