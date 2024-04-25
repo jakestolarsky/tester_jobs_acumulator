@@ -6,7 +6,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-from project.app.logic.job_scraper import JobScraper
+from app.logic.job_scraper import JobScraper
 
 
 app = FastAPI()
@@ -31,7 +31,7 @@ async def root(request: Request):
 @app.get("/scrape/")
 async def scrape_jobs():
     try:
-        config = load_config("project/config/job_sites.json")
+        config = load_config(r"config/job_sites.json")
         all_jobs = []
         for site in config['sites']:
             scraper = JobScraper(site['url'], site['selectors'], site['name'])
@@ -44,7 +44,7 @@ async def scrape_jobs():
 @app.get("/download_offers/json")
 async def download_json():
     try:
-        config = load_config("project/config/job_sites.json")
+        config = load_config(r"config/job_sites.json")
         all_jobs = []
         for site in config['sites']:
             scraper = JobScraper(site['url'], site['selectors'], site['name'])
