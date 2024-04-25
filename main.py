@@ -5,12 +5,14 @@ from fastapi import FastAPI, Request, HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.logic.job_scraper import JobScraper
 
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.add_middleware(
     CORSMiddleware,
@@ -36,8 +38,8 @@ async def scrape_jobs():
         for site in config['sites']:
             scraper = JobScraper(site['url'], site['selectors'], site['name'])
             scraper.fetch_jobs()
-            all_jobs.extend(scraper.jobs)  # Zbieranie wszystkich ofert pracy
-        return all_jobs  # Zwracanie ofert pracy jako JSON
+            all_jobs.extend(scraper.jobs)
+        return all_jobs
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

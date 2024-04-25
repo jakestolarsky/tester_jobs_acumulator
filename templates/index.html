@@ -2,18 +2,13 @@
 <html lang="pl">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>🐞 Tester jobs acumulator</title>
+    <link rel="icon" type="image/png" href="/static/favicon.png">
 
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-    ></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&display=swap" rel="stylesheet"/>
 
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&display=swap");
@@ -75,11 +70,17 @@
     <div
       class="overflow-x-auto flex flex-col p-8 items-center justify-center w-full"
     >
-      <h1
-        x-data="{title: '🐞 TESTER JOBS ACUMULATOR'}"
-        x-text="title"
-        class="text-stone-800 text-3xl font-black mb-5 mt-20"
-      ></h1>
+      <div
+        class="flex flex-row items-center mb-5 mt-20"
+      >
+        <img src="/static/ladybug.svg" alt="ladybug icon" class="size-14 rotate-45 mb-2 hover:-rotate-45 transition duration-300 delay-300">
+
+        <h1
+          x-data="{title: 'TESTER JOBS ACUMULATOR'}"
+          x-text="title"
+          class="text-stone-800 text-3xl font-black"
+        ></h1>
+      </div>
 
       <div x-data="jobFetcher()" class="relative overflow-x-auto">
         <div class="flex items-center justify-between space-x-2">
